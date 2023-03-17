@@ -5,18 +5,6 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Date;
 
-//MILESTONE 1
-//        Stiamo lavorando a un programma che deve gestire eventi (ad esempio concerti,
-//        conferenze, spettacoli,...)
-
-//        Vanno inoltre implementati dei metodi public che svolgono le seguenti funzioni:
-//        1. prenota: aggiunge uno ai posti prenotati. Se l’evento è già passato o non ha posti
-//        disponibili deve sollevare un’eccezione.
-//        2. disdici: riduce di uno i posti prenotati. Se l’evento è già passato o non ci sono
-//        prenotazioni deve sollevare un’eccezione.
-//        3. l’override del metodo toString() in modo che venga restituita una stringa
-//        contenente: data formattata - titolo
-//        Aggiungere eventuali metodi (public e private) che vi aiutino a svolgere le funzioni richieste.
 public class Evento {
 
     String title;
@@ -31,7 +19,7 @@ public class Evento {
         if (date.isBefore(LocalDate.now())){
             throw new DateTimeException("Non puoi inserire una data passata!");
         }
-        if (totalSeats.compareTo(BigDecimal.ZERO) >= 1){
+        if (totalSeats.compareTo(BigDecimal.ZERO) < 0){
             throw new IllegalSeatsNumber("I posti totali devono essere superiori o uguali ad 1");
         }
 
@@ -66,9 +54,32 @@ public class Evento {
     }
 
 
+    public void reserve(){
+        if (date.isBefore(LocalDate.now())){
+            throw new DateTimeException("Non puoi prenotarti ad un evento già concluso!");
+        }
+        if (bookedSeats.add(BigDecimal.ONE).compareTo(totalSeats) > 0){
+            throw new NoSeatsException("Mi dispiace non ci sono più posti disponibili.");
+        }
+        bookedSeats = bookedSeats.add(BigDecimal.valueOf(1));
+    }
 
-//     1. prenota: aggiunge uno ai posti prenotati. Se l’evento è già passato o non ha posti
-//        disponibili deve sollevare un’eccezione.
+
+
+    public void removeReservation(){
+        if (date.isBefore(LocalDate.now())){
+            throw new DateTimeException("Non puoi rimuovere la prenozione ad un evento già concluso!");
+        }
+        if (bookedSeats.subtract(BigDecimal.ONE).compareTo(BigDecimal.ZERO)<0){
+            throw new NoSeatsException("Mi dispiace non ci sono altre prenotazioni da rimuovere.");
+        }
+        bookedSeats = bookedSeats.subtract(BigDecimal.ONE);
+    }
+
+    @Override
+    public String toString() {
+        return "data: " + getDate() + " titolo: " + getTitle();
+    }
 }
 
 
