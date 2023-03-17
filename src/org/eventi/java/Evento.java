@@ -6,9 +6,9 @@ import java.time.LocalDate;
 
 public class Evento {
 
+    private final BigDecimal totalSeats;
     private String title;
     private LocalDate date;
-    private BigDecimal totalSeats;
     private BigDecimal bookedSeats = new BigDecimal(0);
 
     public Evento(String title, LocalDate date, BigDecimal totalSeats) throws DateTimeException, IllegalSeatsNumber {
